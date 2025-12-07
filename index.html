@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V for Vendetta | Codebase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+
+        <div id="login-screen" class="screen active">
+            <div class="login-box">
+                <div class="logo-area">
+                    <h1 class="title">V for Vendetta #CodeShare</h1>
+                </div>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="discord-id-login">Discord Kullanıcı ID:</label>
+                        <input type="text" id="discord-id-login" placeholder="Örn: 123456789012345678" required aria-label="Discord ID">
+                        
+                        <label for="access-key-login">Access Key:</label>
+                        <input type="password" id="access-key-login" placeholder="Keyinizi giriniz" required aria-label="Access Key">
+                        
+                        <div class="remember-me-container">
+                            <input type="checkbox" id="remember-me">
+                            <label for="remember-me">Beni Hatırla</label>
+                        </div>
+                        
+                        <p id="login-message-area" class="message-text"></p>
+
+                        <button type="submit" class="btn btn-red">
+                            LOGIN / ENTER THE BASE
+                        </button>
+                        
+                        <hr class="divider">
+                        
+                        <p class="small-text">Erişim anahtarınız yok mu?</p>
+                        <button type="button" class="btn btn-ghost" onclick="showScreen('key-info-screen')">
+                            Discord Üzerinden Key Al!
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="key-info-screen" class="screen" style="display: none;">
+            <div class="login-box">
+                <h3 style="color:#CC0000; text-align: center;">KEY TALEP YÖNTEMİ</h3>
+                <p class="small-text" style="color:white; font-size: 16px; text-align: left;">
+                    Erişim anahtarınızı almak için lütfen Discord sunucumuzda bulunan özel kanalda 
+                    $**\text{/key-olustur}$** komutunu kullanınız. Botumuz, anahtarınızı anında size **DM** ile gönderecektir!
+                </p>
+                <p id="info-message-area" class="message-text" style="color: #FFDD00;"></p>
+
+                <hr class="divider">
+                <button type="button" class="btn btn-red" onclick="showScreen('login-screen')">
+                    Geri Dön (Giriş Ekranı)
+                </button>
+            </div>
+        </div>
+
+        <div id="management-screen" class="screen" style="display: none;">
+            <header class="top-bar">
+                <div class="logo-text">V FOR VENDETTA</div>
+                <div id="announcement-bar" class="announcement-bar">
+                    ÖNEMLİ DUYURU: Bot Sunucusunda bakım var!
+                </div>
+                <div class="top-actions">
+                    <button id="admin-panel-btn" class="btn btn-ghost btn-small" onclick="showAdminPanel()" style="display: none;">ADMİN PANELİ</button>
+                    <button class="btn btn-red btn-small" onclick="logout()">LOGOUT</button>
+                </div>
+            </header>
+
+            <div class="main-content-wrapper">
+                
+                <aside class="sidebar">
+                    <div class="sidebar-title">THE ARSENAL</div>
+                    <nav id="bot-channels">
+                        <a href="#" class="channel-link active" data-channel="guard" onclick="loadChannelContent('guard', event)"># Guard Bot</a>
+                        <a href="#" class="channel-link" data-channel="ticket" onclick="loadChannelContent('ticket', event)"># Ticket Bot</a>
+                    </nav>
+                    <div class="user-info">Rol: <span id="user-role">...</span></div>
+                </aside>
+
+                <main class="content-area" id="content-display">
+                    <h2 class="content-title" id="current-channel-title"># Guard Bot</h2>
+                    
+                    <div class="content-list" id="dynamic-content-list">
+                        <div class="content-card">
+                            <h3 class="card-title">Guard Bot V4.0 (Yeni Kod)</h3>
+                            <p class="card-meta">Ekleyen: OWNER | 07.12.2025</p>
+                            <p class="card-description">Sunucu envanterini korumak için geliştirilmiş son sürüm. Daha hızlı ve daha güvenli.</p>
+                            
+                            <div class="card-actions">
+                                <button class="btn btn-red btn-small" onclick="window.open('https://github.com/link_to_code', '_blank')">ACCESS CODE</button>
+                                <button class="btn btn-ghost btn-small like-btn" data-content-id="1" onclick="handleReaction(this)">
+                                    ❤️ Beğen (12)
+                                </button>
+                            </div>
+
+                            <div class="comment-section" style="display: none;">
+                                <p class="comment-count">Yorumlar (2)</p>
+                                <textarea placeholder="Admin/Owner yorumu..." rows="2"></textarea>
+                                <button class="btn btn-red btn-small" onclick="postComment(this)">Yorum Yap</button>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <div id="admin-screen" class="screen" style="display: none;">
+            <header class="top-bar">
+                <div class="logo-text" style="color:#FF3333;">THE CITADEL CONTROLS</div>
+                <button class="btn btn-red btn-small" onclick="showScreen('management-screen')">Geri Dön</button>
+            </header>
+
+            <div class="admin-grid">
+                
+                <div class="admin-module">
+                    <h3 class="module-title">1. Kullanıcı Yönetimi</h3>
+                    <div class="form-group">
+                        <label>Discord ID (Kullanıcı)</label>
+                        <input type="text" id="manage-user-id" placeholder="ID Giriniz">
+                        <label>Rol Seçimi</label>
+                        <select id="user-role-select">
+                            <option value="premium">Premium Üye</option>
+                            <option value="admin">Admin Üye</option>
+                            <option value="senior">Kıdemli Üye</option>
+                            <option value="owner">Owner</option>
+                        </select>
+                        <button class="btn btn-red" onclick="handleRoleAssignment()">ROL ATAMA</button>
+                    </div>
+                </div>
+
+                <div class="admin-module">
+                    <h3 class="module-title">2. Ban Protokolü</h3>
+                    <div class="form-group">
+                        <label>Banlanacak Discord ID</label>
+                        <input type="text" id="ban-user-id" placeholder="Banlanacak ID">
+                        <button class="btn btn-red" style="background-color: #A00000;" onclick="handleBanUser()">PERMANENT BAN</button>
+                        <p class="message-text" id="ban-message-area"></p>
+                    </div>
+                </div>
+                
+                <div class="admin-module" id="content-admin-module">
+                    <h3 class="module-title">3. İçerik ve Kanal Yönetimi</h3>
+                    <div class="form-group">
+                        <label>Yeni Kanal Ekle</label>
+                        <input type="text" id="new-channel-name" placeholder="#yeni-bot-adi">
+                        <button class="btn btn-red" onclick="handleChannelCreation()">KANAL OLUŞTUR</button>
+                        
+                        <hr class="divider" style="margin: 15px 0;">
+                        
+                        <label>Yeni İçerik Ekle (Seçili Kanala)</label>
+                        <select id="target-channel-select">
+                            </select>
+                        <input type="text" placeholder="İçerik Başlığı">
+                        <input type="url" placeholder="Code Share Link (URL)">
+                        <button class="btn btn-red" onclick="handleContentCreation()">İÇERİK YAYINLA</button>
+                    </div>
+                </div>
+
+                <div class="admin-module">
+                    <h3 class="module-title">4. Duyuru Yayınlama</h3>
+                    <div class="form-group">
+                        <label>Duyuru Mesajı</label>
+                        <textarea id="announcement-text" rows="3" placeholder="Önemli duyurunuzu buraya yazın..."></textarea>
+                        <button class="btn btn-red" onclick="handleAnnouncement()">DUYURU YAYINLA</button>
+                        <p class="message-text" id="announcement-message-area"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
